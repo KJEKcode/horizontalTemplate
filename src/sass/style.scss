@@ -1,413 +1,230 @@
-// -- IMPORT NORMALIZE --
-
+/* ~~ IMPORT NORMALIZE ~~ */
 @import "normalize";
 
-// -- VARIABLES --
-
-
-// -- COLOR --
-$white95: #f2f2f2;
-$white90: #e6e6e6;
-$white80: #cccccc;
-$white40: #404040;
-$white5: #0d0d0d;
-$whiteTransparent: rgba(13, 13, 13, .65);
-
-// -- SPACING --
-$standardPadding: 1rem;
-
-
-// -- CUSTOM RESET --
-
+/* ~~ CUSTOM RESET ~~ */
+// remove all margin and padding
 * {
 	margin: 0;
 	padding: 0;
 }
-
+// font family and smooth scroll <html> document
 html {
-	font-family: 'Open Sans', sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
+	scroll-behavior: smooth;
 }
-
+// <ul> style to none
 ul {
 	list-style: none;
 }
-
+// IE nested <ul> style to none
+ul ul {
+	list-style: none;
+}
+// <a> and <button>:
 a, button {
-	display: block;
-	color: inherit;
+	display: block; // block level elements
+	color: inherit; // color is inherited from parent
+	line-height: 1.5em; // line height is the same
 }
-
+// no text decoration on <a> 
 a {
-	text-decoration: none;
-	background-color: transparent;
-	
+	text-decoration: none;	
 }
-
+// all <button>:
 button {
-	border: none;
-	background: inherit;
-	font-family: inherit;
-	font-size: 100%;
-	line-height: 1.15;
-	cursor: pointer;
-	text-align: left;
-	font: normal 1em 'Open Sans', sans-serif;
+	border: none; // remove border
+	background: inherit; // inherit background from parent
+	width: 100%; // width set to 100% (match block level elements)
+	cursor: pointer; // cursor set to pointer
+	text-align: left; // align text to center
+	font: normal 1em Arial, Helvetica, sans-serif; // noramal font weight 1em font size arial font
 }
 
-// -- FONT STYLE --
-
-h1 {
-	font-size: 1.476em;
-}
-
-h2 {
-	font-size: 1.383em;
-}
-
-h3 {
-	font-size: 1.296em;
-}
-
-h4 {
-	font-size: 1.215em;
-}
-
-h5 {
-	font-size: 1.138em;
-}
-
-h6 {
-	font-size: 1.067em;
-}
-
-h1, h2, h3, h4, h5, h6, b {
-	font-weight: 700;
-}
-
-h1, h2, h3, h4, h5, h6 {
-	margin: .5rem 0;
-}
-
-p, a, button {
+/* ~~ FONT STYLE ~~ */
+// font size based on modular scale "minor second 1.067" https://www.modularscale.com/?1&em&1.067
+h1 {font-size: 1.476em;}
+h2 {font-size: 1.383em;}
+h3 {font-size: 1.296em;}
+h4 {font-size: 1.215em;}
+h5 {font-size: 1.138em;}
+h6 {font-size: 1.067em;}
+p, a, button, span, input, optgroup, select, textarea {
 	font-size: 1em;
 }
 
-// -- REUSABLE CLASSES -- 
-
-.flex-container {
-	display: flex;
-}
-
-[aria-hidden = "true"] {
+/* ~~ ATTRIBUTE STYLES ~~ */
+// IMPORTANT aria hidden true set to display none
+[aria-hidden = true] {
 	display: none;
 }
 
-.background-image {
-	background-position: center;
-	background-repeat: no-repeat;
-}
-
-.transparent-background {
-	background-color: $whiteTransparent;
-}
-
-.arrow-container {
-	text-align: center;
-}
-
-.return-top {
-	text-align: center;
-	text-transform: uppercase;
-	height: 0;
-	overflow: hidden;
-}
-
-.return-top:focus {
+/* ~~ FOCUS & HOVER STYLES ~~ */
+//  IMPORTANT (hidden unless focused) skip to <main> content <a> focus state
+#skip-header:focus {
 	height: inherit;
 	padding: 1rem;
 }
-
-//  -- HEADER & NAVIGATION -- 
-
+// hover states for header <a> and <button> and footer <a>	
+#sitewide-header a:hover, #sitewide-header button:hover, #sitewide-footer a:hover {
+	text-decoration: underline;
+	background-color: lighten(#f2f2f2, 5%);
+}
+// focus states for header <a> / <button> and footer <a>
+#sitewide-header a:focus, #sitewide-header button:focus, #sitewide-footer a:focus {
+	text-decoration: underline;
+	background-color: lighten(#f2f2f2, 5%);
+}
+// <body> background color
+body {
+	background-color: #d9d9d9;
+}
+// IMPORTANT (hidden unless focused) skip sitewide <header>
 #skip-header {
 	height: 0;
 	overflow: hidden;
 	text-transform: uppercase;
-	font-weight: 700;
+	font-weight: bold;
 	text-align: center;
 	position: fixed;
 	top: 0;
 	z-index: 2;
 	width: 100%;
-	background-color: $white90;
+	background-color: #f2f2f2;
 }
-
-#skip-header:focus {
-	height: inherit;
+// <header> for entire website
+#sitewide-header {
+	position: fixed;
+	width: 100%;
+	top: 0;
+	background-color: #f2f2f2;
+}
+// add padding to sitewide <header> <a> / <button> and footer <a>
+#sitewide-header a, #sitewide-header button, #sitewide-footer a {
 	padding: 1rem;
 }
-
-#sitewide-header {
-	background-color: $white90;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 1;
-	a:hover, button:hover {
-		font-weight: 700;
-		background-color: $white95;
-	}
+// <ul> visible navigation
+#visible-navigation {
+	display: flex;
 }
 
-#visable-navigation {
-	border-bottom: .1rem solid $white80;
-}
-
-#logo-container {
-	flex-grow: 1;
-	a {
-		display: inline-block;
-	}
-}
-
-#logo-container a, {
-	padding: 1.1rem 1rem;
-}
-
-#toggle-navigation {
-	padding: $standardPadding;
-}
-
-
-#navigation-list {
-	a {
-		padding: 1.1rem 1rem;
-		border-bottom: .1rem solid $white80;
-	}
-}
-
-// -- MAIN CONTENT --
-
-html {
-	scroll-behavior: smooth;
-
-}
-
-h1, h2, h3, h4, h5, h6 {
-	text-align: center;
-}
-
-#home-section {
-	height: 100vh;
-	background-color: $white5;
-	background-size: contain;
-	background-image: url('../images/kjek-logo.png');
-	flex-direction: column;
-	justify-content: center;
+#logo-container a {
+	display: flex;
 	align-items: center;
-	color: $white95;
-	div {
-		border-radius: 1rem;
-		padding: $standardPadding;
-	}
-	p {
-		margin-bottom: .5rem;
-	}
-	a {
-		position: absolute;
-		bottom: 2rem;
-	}
+	padding: .35rem 1rem .5rem 1rem;
 }
 
-#about-me {
-	padding: 4rem 1rem;
-	background-color: $white95;
-	h2 {
-		margin: 0 0 1rem 0;
-		border-bottom: .1rem solid $white80;
-	}
-	.image-container {
-		text-align: center;
-		margin-bottom: 1rem;
-		img {
-			border-radius: 9rem;
-		}
-	}
-	.arrow-container {
-		margin-top: 3rem;
-	}
-	p {
-		line-height: 1.5em;
-		margin-bottom: 2rem;
-	}
-	a {
-		display: inline;
-	}
+// <span> in <a> in <li> logo container
+#logo-container a span {
+	margin-top: .3rem;
+    margin-left: .5rem;
 }
 
-#language-tool {
-	padding: 4rem 1rem;
-	background-image: url('../images/language-image.jpg');
-	background-size: cover;
-	color: $white95;
-	text-align: center;
-	h3 {
-		padding-bottom: .5rem;
-		margin-bottom: 1rem;
-		border-bottom: .1rem solid $white40;
-	}
-	.grid-item {
-		margin-bottom: 1rem;
-	}
-	.transparent-background {
-		display: inline-block;
-		padding: 2rem;
-		border-radius: 1rem;
-		border: .1rem solid $white80;
-	}
-	p {
-		margin-top: 1rem;
-		
-	}
-	a {
-		margin-top: 2rem;
-	}
+#control-container {
+	margin-left: auto;
 }
-
-#my-project {
-	padding: 4rem 0;
+// <a> in <li> in <ul> toggled navigation
+#toggled-navigation li a {
+	display: flex;
+	align-items: center;
 }
-
-//  -- FORM STYLE --
-
-#contact-me {
-	padding: 4rem 1rem;
-	form {
-		border: .1rem solid $white80;
-		box-shadow: .4rem .4rem .4rem $white90;
-		padding: 1rem;
-		label {
-			margin: .5rem 0;
-		}
-		label, input {
-			display: block;
-		}
-		input, textarea, select {
-			width: 100%;
-		}
-		.submit-form {
-			margin-top: 1rem;
-		}
-	}
+// <span> in <a> in <li> in <ul> toggled navigation
+#toggled-navigation li a span{
+	margin-top: .3rem;
+	margin-left: .5rem;
 }
-
-
-
-// -- FOOTER STYLES --
-
+// <main> main content
+#main-content {
+	padding: 3.5rem 1rem;
+}
+// <figure> 
+figure {
+	margin: 1rem 0;
+	border: .1rem solid #ccc;
+}
+// <img> in <figure>
+figure img {
+	width: 100%;
+	height: auto;
+}
+// <figcaption> add padding
+figcaption {
+	margin: .3rem .3rem;
+	font-size: .937em;
+}
+// <footer> sitewide footer
 #sitewide-footer {
-	background-color: $white90;
+	background-color: #f2f2f2;
+}
+// <a> in <footer>
+#sitewide-footer a{
 	text-align: center;
-	ul {
-		border-top: .1rem solid $white80;
-	}
-	li {
-		border-bottom: .1rem solid $white80;
-		a {
-			padding: 1rem 0;
-		}
-		a:hover, a:focus {
-			font-weight: 700;
-			background-color: $white95;
-		}
-	}
+}
+// <a> top button
+#top-button {
+	position: fixed;
+	bottom: 1rem;
+	right: 1rem;
+	opacity: 0;
+	transform: scale(0);
+	visibility: hidden;
+	transition: .5s;
+}
+// <a> top button with a class of show
+#top-button.show {
+	opacity: 1;
+	transform: scale(1);
+	visibility: visible;
 }
 
-// -- 768PX MEDIA QUERY -- 
-
+/* ~~ 768PX MEDIA QUERY ~~ */ 
 @media only screen and (min-width: 768px) {
-
-	// -- REUSABLE CLASSES --
-
-	.background-image {
-		background-attachment: fixed;
-	}
- 
-	.desktop-activated {
-		display: block;
-	}
-
-	.desktop-inactivated {
-		display: none;
-	}
-	
-	#home-section {
-		background-size: 768px 606px;
-		background-image: url('../images/kjek-logo.png');
-	}
-
 	#sitewide-header {
-		display: flex;
+		width: inherit;
+		height: 100vh;
 	}
-
-	#visable-navigation {
-		display: flex;
-		flex-grow: 1;
+	#visible-navigation {
+		flex-direction: column;
 	}
-
-	#navigation-list {
-		display: flex;
+	#logo-container img {
+		margin-left: .3rem;
 	}
 	
-	.grid-container {
+	#control-container {
+		margin-left: 0;
+	}
+	// <main> main content
+	#main-content {
+		padding: .5rem .5rem 1rem 5.1rem;
+	}
+	// <section> dog, car and sport
+	.gallery-section {
 		display: grid;
-		grid-template-columns: auto auto;
-		grid-gap: 1rem;
+		grid-template-columns: repeat(3, 1fr);
 	}
+	// <figure> set to flex - column
+	figure {
+		padding: 0;
+		margin: 1rem .5rem;
+		border: .1rem solid #ccc;
+	}
+	// <img> in <figure> set to flex-grow 1
 
-	#sitewide-header {
-		border-bottom: .1rem solid $white80;
+	// <figcaption> in <figure>
+	figcaption {
+		margin: .3rem .3rem;
 	}
-
-	#visable-navigation {
-		border-bottom: none;
+	// <footer> for entire website
+	#sitewide-footer {
+		padding-left: 4.2rem;
 	}
-
-	#navigation-list {
-		a {
-			border-bottom: none;
-		}
-	}
-}
-
-@media only screen and (min-width: 1025px) {
-	.grid-container {
-		margin: 4rem 0;
-		grid-template-columns: auto auto auto;
-		grid-gap: 4rem;
-	}
-	#about-content {
+	// <ul> in <footer> sitewide footer
+	#sitewide-footer ul {
 		display: flex;
-		align-items: center;
-	}	
-
-	#about-me {
-		.image-container {
-			margin: 0 1rem 0 0;
-		}
-		p {
-			margin-bottom: 0;
-		}
-		.arrow-container {
-			margin-top: 4rem;
-		}
+		justify-content: space-around;
+	}
+	// <a> top button
+	#top-button {
+		bottom: .2rem;
 	}
 }
 
-@media only screen and (min-width: 1500px) {
-	.grid-container {
-		margin: 6rem 0;
-		grid-template-columns: auto auto auto auto auto auto;
-	}
-
-}
