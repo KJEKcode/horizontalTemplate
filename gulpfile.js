@@ -1,10 +1,13 @@
 var gulp = require('gulp'),
 imagemin = require('gulp-imagemin'),
-uglify = require('gulp-uglify'),
 sass = require('gulp-sass'),
 cssmin = require('gulp-cssmin'),
 rename = require('gulp-rename'),
-concat = require('gulp-concat');
+concat = require('gulp-concat'),
+gulp = require("gulp"),
+babel = require("gulp-babel"),
+sourcemaps = require("gulp-sourcemaps"),
+minify = require("gulp-babel-minify");
 
 /*
  -- TOP LEVEL FUNCTIONS --
@@ -49,8 +52,15 @@ gulp.task('sass', function(done){
 // scripts
 gulp.task('scripts', function(done){
  gulp.src('src/js/*.js')
+ .pipe(sourcemaps.init())
+ .pipe(babel())
  .pipe(concat('compiled.min.js'))
- .pipe(uglify())
+ .pipe(minify({
+      mangle: {
+        keepClassName: true
+      }
+    }))
+ .pipe(sourcemaps.write("."))
  .pipe(gulp.dest('dist/js'));
  done();
 });

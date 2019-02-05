@@ -1,95 +1,154 @@
-function loadControls() {
-    var sitewideHeader = document.getElementById('sitewide-header'),
-    widthOfWindow = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-    headerAnchors = sitewideHeader.getElementsByTagName('a'),
-    headerButtons = sitewideHeader.getElementsByTagName('button'),
-    menuButton = document.getElementById('menu-button'),
-    mainNavigation = document.getElementById('toggled-navigation');
-    titleSpan = document.getElementById('title-span');
-    if (widthOfWindow < 768) {
-        titleSpan.setAttribute('aria-hidden', 'false');
-    }
-    for (var i = headerAnchors.length - 1; i >= 0; i--) {
-        headerAnchors[i].addEventListener('click', anchorClick);
-    }
-    for (var i = headerButtons.length - 1; i >= 0; i--) {
-        headerButtons[i].addEventListener('click', buttonClick);
-    }
-    window.addEventListener('resize', debounce(checkAria, 100));
-    window.addEventListener('scroll', debounce(backToTop, 100));
+// -- VARIABLES --
+
+const getWindowWidth = () => {
+    return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 }
 
-function anchorClick() {
-    var sitewideHeader = document.getElementById('sitewide-header'),
-    widthOfWindow = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-    mainNavigation = document.getElementById('toggled-navigation'),
-    subMenus = mainNavigation.getElementsByTagName('ul'),
-    dropdownButtons = mainNavigation.getElementsByTagName('button'),
-    headerButtons = sitewideHeader.getElementsByTagName('button');
-    mainNavigation.setAttribute('aria-hidden', 'true'),
-    titleSpan = document.getElementById('title-span');
-    if (widthOfWindow > 768) {
-        titleSpan.setAttribute('aria-hidden', 'true');
-    }
-    for (var i = subMenus.length - 1; i >= 0; i--) {
-        subMenus[i].setAttribute('aria-hidden', 'true');
-    }
-    for (var i = headerButtons.length - 1; i >= 0; i--) {
-        headerButtons[i].setAttribute('aria-expanded', 'false');
+const getSitewideHeader = () => {
+    return document.getElementById('sitewide-header');
+}
+
+const getHeaderAnchor = () => {
+    return getSitewideHeader().getElementsByTagName('a');
+}
+
+const getHeaderButton = () => {
+    return getSitewideHeader().getElementsByTagName('button');
+}
+
+const getToggledNavigation = () => {
+    return document.getElementById('toggled-navigation');
+}
+
+const getSubMenu = () => {
+    return getToggledNavigation().getElementsByTagName('ul');
+}
+
+const getDropdownButton = () => {
+    return getToggledNavigation().getElementsByTagName('button');
+}
+
+const getNavigationContainer = () => {
+    return document.getElementById('navigation-container');
+}
+
+const getAllNavMenu = () => {
+    return getNavigationContainer().getElementsByTagName('ul');
+}
+
+const getTitleSpan = () => {
+    return document.getElementById('title-span');
+}
+
+const getTopButton = () => {
+    return document.getElementById('top-button');
+}
+
+// -- EVENT LISTENERS --
+
+window.addEventListener('resize', debounce(checkAria), 75);
+
+window.addEventListener('scroll', debounce(backToTop), 75);
+
+for (var i = getHeaderAnchor().length - 1; i >= 0; i--) {
+    getHeaderAnchor()[i].addEventListener('click', anchorClick);
+}
+
+for (var i = getHeaderButton().length - 1; i >= 0; i--) {
+    getHeaderButton()[i].addEventListener('click', buttonClick);
+}
+
+// -- REUSABLE FUNCTIONS --
+
+// -- TITLE SPAN --
+const titleSpanTrue = () => {
+    getTitleSpan().setAttribute('aria-hidden', 'true');
+}
+
+const titleSpanFalse = () => {
+    getTitleSpan().setAttribute('aria-hidden', 'false');
+}
+
+// -- WINDOW LOAD --
+
+window.onload = checkTitleSpan;
+
+function checkTitleSpan() {
+    if (getWindowWidth() < 768) {
+        titleSpanFalse();
     }
 }
 
-function buttonClick(e) {
-    var clickTarget = e.target,
-    widthOfWindow = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-    ariaControls = clickTarget.getAttribute('aria-controls'),
+// -- CLOSE NAVIGATION --
+
+const closeNavigation = () => {
+    if (getWindowWidth() > 768) {
+        titleSpanTrue();
+    }
+    getToggledNavigation().setAttribute('aria-hidden', 'true');
+    for (var i = getSubMenu().length - 1; i >= 0; i--) {
+        getSubMenu()[i].setAttribute('aria-hidden', 'true');
+    }
+    for (var i = getHeaderButton().length - 1; i >= 0; i--) {
+        getHeaderButton()[i].setAttribute('aria-expanded', 'false');
+    }
+}
+
+// -- TOGGLE TARGET MENU --
+
+const toggleTargetMenu = (target) => {
+    let ariaControls = target.getAttribute('aria-controls'),
     controlledAria = document.getElementById(ariaControls),
-    ariaHidden = controlledAria.getAttribute('aria-hidden'),
-    titleSpan = document.getElementById('title-span');
+    ariaHidden = controlledAria.getAttribute('aria-hidden');
     if (ariaHidden == 'true') {
         controlledAria.setAttribute('aria-hidden', 'false');
-        clickTarget.setAttribute('aria-expanded', 'true');
-        if (widthOfWindow > 768) {
-            titleSpan.setAttribute('aria-hidden', 'false');
+        target.setAttribute('aria-expanded', 'true');
+        if (getWindowWidth() > 768) {
+            titleSpanFalse();
         }
     } else {
         controlledAria.setAttribute('aria-hidden', 'true');
-        clickTarget.setAttribute('aria-expanded', 'false');
-        if (widthOfWindow > 768) {
-            titleSpan.setAttribute('aria-hidden', 'true');
+        target.setAttribute('aria-expanded', 'false');
+        if (getWindowWidth() > 768) {
+            titleSpanTrue();
         }
     }
 }
 
+// -- ANCHOR CLICK --
+
+function anchorClick() {
+    closeNavigation();    
+}
+
+// -- BUTTON CLICK --
+
+function buttonClick({ target }) {
+    toggleTargetMenu(target);
+}
+
 function checkAria() {
-    var widthOfWindow = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-    sitewideHeader = document.getElementById('sitewide-header'),
-    navigationContainer = document.getElementById('navigation-container'),
-    mainNavigation = document.getElementById('toggled-navigation'),
-    headerButtons = sitewideHeader.getElementsByTagName('button'),
-    navigationMenus = navigationContainer.getElementsByTagName('ul'),
-    dropdownButtons = mainNavigation.getElementsByTagName('button'),
-    subMenus = mainNavigation.getElementsByTagName('ul'),
-    titleSpan = document.getElementById('title-span');
-    if (widthOfWindow < 768) {
-        titleSpan.setAttribute('aria-hidden', 'false');
-        for (var i = navigationMenus.length - 1; i >= 0; i--) {
-            navigationMenus[i].setAttribute('aria-hidden', 'true');
+    if (getWindowWidth() < 768) {
+        titleSpanFalse();
+        for (var i = getAllNavMenu().length - 1; i >= 0; i--) {
+            getAllNavMenu()[i].setAttribute('aria-hidden', 'true');
         }
-        for (var i = headerButtons.length - 1; i >= 0; i--) {
-            headerButtons[i].setAttribute('aria-expanded', 'false');
+        for (var i = getHeaderButton().length - 1; i >= 0; i--) {
+            getHeaderButton()[i].setAttribute('aria-expanded', 'false');
         }
     } else {
-        titleSpan.setAttribute('aria-hidden', 'true');
+        let menuAria = getToggledNavigation().getAttribute('aria-hidden');
+        if (menuAria === 'true') {
+            titleSpanTrue();
+        }
     }
 }
 
 function backToTop() {
-    var topButton = document.getElementById('top-button');
     if (document.documentElement.scrollTop > window.innerHeight) {
-        topButton.classList.add('show');
+        getTopButton().classList.add('show');
     } else {
-        topButton.classList.remove('show');
+        getTopButton().classList.remove('show');
     }
 }
 
@@ -106,12 +165,12 @@ function debounce(func, wait, immediate) {
         };
         var callNow = immediate && !timeout;
         clearTimeout(timeout);
-        timeout = setTimeout(later, wait || 200);
+        timeout = setTimeout(later, wait || 100);
         if ( callNow ) { 
             func.apply(context, args);
         }
     };
 };
 
-window.onload = loadControls;
+
 
